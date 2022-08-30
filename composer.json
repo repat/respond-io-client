@@ -1,0 +1,22 @@
+{
+    "name": "repat/respond-io-client",
+    "description": "Client for respond.io contacts and messaging API",
+    "keywords": ["api", "client", "respond.io", "respondio", "contacts", "messages", "sdk"],
+    "homepage": "https://github.com/repat/respond-io-client",
+    "license": "MIT",
+    "version" : "0.1",
+    "authors": [
+        {
+            "name": "repat",
+            "email": "repat@repat.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.0 | ^8.1",
+        "guzzlehttp/guzzle": "^6.0 | ^7.0"
+    },
+    "autoload": {
+        "psr-4": { "Repat\\RespondIoClient\\": "src/" }
+    }
+}
