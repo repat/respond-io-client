@@ -5,20 +5,22 @@ namespace Repat\RespondIoClient\Traits;
 use Repat\RespondIoClient\Exceptions\RespondIoException;
 
 /**
- * @see https://docs.respond.io/developer-api/messages-api
+ * @see https://developers.respond.io/docs/api/42fc125b57906-messaging
  */
 trait Messages {
 
 	/**
 	 * @param string $id Contact ID
 	 * @param string $text Text of message
-	 * @see https://docs.respond.io/developer-api/messages-api#send-text-request
+	 * @see https://developers.respond.io/docs/api/a748f5bfb1bb5-send-a-message
 	 */
-	public function sendText(string $id, string $text) {
-		$response = $this->guzzle->post('message/sendContent/' . urlencode($id), [
-			'body' => [
-				'type' => 'text',
-				'text' => $text,
+	public function sendMessage(string $id, string $text) {
+		$response = $this->guzzle->post("contact/{$id}/message", [
+			'form_params' => [
+				'message' => [
+					'type' => 'text',
+					'text' => $text,
+				]
 			]
 		]);
 		return $this->unpackResponse($response);
@@ -28,37 +30,22 @@ trait Messages {
 	 * @param string $id Contact ID
 	 * @param string $type 'image', 'audio', 'video', 'file'
 	 * @param string $url URL of media
-	 * @see https://docs.respond.io/developer-api/messages-api#send-attachment-request
+	 * @see https://developers.respond.io/docs/api/a748f5bfb1bb5-send-a-message
 	 */
 	public function sendAttachment(string $id, string $type, string $url) {
 		if(! in_array($type, self::ATTACHMENT_TYPES)) {
 			throw new RespondIoException('Invalid Type for attachment: ' . $type);
 		}
 
-		$response = $this->guzzle->post('message/sendContent/' . urlencode($id), [
-			'body' => [
-				'type' => $type,
-				'text' => $url,
-			]
-		]);
-		return $this->unpackResponse($response);
-	}
-
-	/**
-	 * @param string $id Contact ID
-	 * @param string $title Question
-	 * @param array $replies Answers
-	 * @see https://docs.respond.io/developer-api/messages-api#send-text-with-quick-replies-request
-	 */
-	public function sendQuickReply(string $id, string $title, array $replies) {
-		if(array_keys($replies) !== array_keys(array_keys($replies))) {
-			throw new RespondIoException('Replies array cannot be an associative array');
-		}
-		$response = $this->guzzle->post('message/sendContent/' . urlencode($id), [
-			'body' => [
-				'type' => 'quick_reply',
-				'title' => $title,
-				'replies' => $replies,
+		$response = $this->guzzle->post("contact/{$id}/message", [
+			'form_params' => [
+				'message' => [
+					'type' => 'attachment',
+					'attachment' => [
+						'type' => $type,
+						'url' => $url,
+					]
+				]
 			]
 		]);
 		return $this->unpackResponse($response);
