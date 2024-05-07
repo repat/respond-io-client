@@ -2,6 +2,7 @@
 
 namespace Repat\RespondIoClient\Traits;
 
+use Repat\RespondIoClient\ContactFilter;
 use Repat\RespondIoClient\Exceptions\RespondIoException;
 
 /**
@@ -16,6 +17,26 @@ trait Contacts {
 	public function getContactById(string $key, string $value) {
 		$response = $this->guzzle->get("contact/{$key}:{$value}");
 		return $this->unpackResponse($response);
+	/**
+	 * @param ContactFilter $filter Object containing filter params
+	 * @param int $cursorId Search offset
+	 * @param int $limit Number of records to return
+	 * @see https://developers.respond.io/docs/api/0759d02787ab3-list-the-contacts
+	 *
+	 */
+	public function getContacts(ContactFilter $filter, int $cursorId = null, int $limit = 10) : Response
+	{
+		$query = ['limit' => $limit];
+
+		if($cursorId != null) {
+			$query['cursorId'] = $cursorId;
+		}
+		return new Response(
+			$this->guzzle->post("contact/list", [
+				'query' => $query,
+				'body' => $filter->toJson()
+			])
+		);
 	}
 
 	/**
