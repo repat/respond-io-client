@@ -4,6 +4,7 @@ namespace Repat\RespondIoClient\Traits;
 
 use Repat\RespondIoClient\ContactFilter;
 use Repat\RespondIoClient\Exceptions\RespondIoException;
+use Repat\RespondIoClient\Response;
 
 /**
  * @see https://developers.respond.io/docs/api/c6e1aa937640e-contact
@@ -14,9 +15,13 @@ trait Contacts {
 	 * @param string $id Contact ID
 	 * @see https://developers.respond.io/docs/api/cbcfb23486778-get-a-contact
 	 */
-	public function getContactById(string $key, string $value) {
-		$response = $this->guzzle->get("contact/{$key}:{$value}");
-		return $this->unpackResponse($response);
+	public function getContactById(string $key, string $value) : Response
+	{
+		return new Response(
+			$this->guzzle->get("contact/{$key}:{$value}")
+		);
+	}
+
 	/**
 	 * @param ContactFilter $filter Object containing filter params
 	 * @param int $cursorId Search offset
@@ -44,18 +49,20 @@ trait Contacts {
 	 * @param string $id Contact ID
 	 * @see https://developers.respond.io/docs/api/12c3d41f3286a-update-a-contact
 	 */
-	public function updateContact(array $fields, string $id = 'phone') {
+	public function updateContact(array $fields, string $id = 'phone') : Response
+	{
 		if(!empty(array_diff(array_keys($fields), self::FIELDS))) {
 			throw new RespondIoException('Not all fields can be updated');
 		}
 		if(!in_array($id, array_keys($fields))) {
 			throw new RespondIoException(ucwords($id) . ' field value missing');
 		}
-		$response = $this->guzzle->put(
-			"contact/{$id}:{$fields[$id]}",
-			["body" => json_encode($fields)]
+		return new Response(
+			$this->guzzle->put(
+				"contact/{$id}:{$fields[$id]}",
+				["body" => json_encode($fields)]
+			)
 		);
-		return $this->unpackResponse($response);
 	}
 
 	/**
@@ -63,12 +70,14 @@ trait Contacts {
 	 * @param array $tags List of tags to be added
 	 * @see https://developers.respond.io/docs/api/d28b7f44788ed-add-tags
 	 */
-	public function addTag(string $id, array $tags) {
-		$response = $this->guzzle->post(
-			"contact/{$id}/tag",
-			['body' => json_encode($tags)]
+	public function addTag(string $id, array $tags) : Response
+	{
+		return new Response(
+			$this->guzzle->post(
+				"contact/{$id}/tag",
+				['body' => json_encode($tags)]
+			)
 		);
-		return $this->unpackResponse($response);
 	}
 
 	/**
@@ -76,19 +85,21 @@ trait Contacts {
 	 * @param array $tags List of tags to be removed
 	 * @see https://developers.respond.io/docs/api/f1e1cf145c8ca-delete-tags
 	 */
-	public function removeTag(string $id, array $tags) {
-		$response = $this->guzzle->delete(
-			"contact/{$id}/tag",
-			['body' => json_encode($tags)]
+	public function removeTag(string $id, array $tags) : Response
+	{
+		return new Response(
+			$this->guzzle->delete(
+				"contact/{$id}/tag",
+				['body' => json_encode($tags)]
+			)
 		);
-		return $this->unpackResponse($response);
 	}
 
 	/**
 	 * @param array $fields Fields to be used to create
 	 * @see https://developers.respond.io/docs/api/985a19073853e-create-a-contact
 	 */
-	public function createContact(array $fields, string $id = 'phone')
+	public function createContact(array $fields, string $id = 'phone') : Response
 	{
 		if(!empty(array_diff(array_keys($fields), self::FIELDS))) {
 			throw new RespondIoException('Not all fields are valid');
@@ -96,12 +107,12 @@ trait Contacts {
 		if(!in_array($id, array_keys($fields))) {
 			throw new RespondIoException(ucwords($id) . ' field value missing');
 		}
-		$response = $this->guzzle->post(
-			"contact/{$id}:{$fields[$id]}",
-			["body" => json_encode($fields)]
+		return new Response(
+			$this->guzzle->post(
+				"contact/{$id}:{$fields[$id]}",
+				["body" => json_encode($fields)]
+			)
 		);
-
-		return $this->unpackResponse($response);
 	}
 }
 
