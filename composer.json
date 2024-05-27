@@ -4,7 +4,7 @@
     "keywords": ["api", "client", "respond.io", "respondio", "contacts", "messages", "sdk"],
     "homepage": "https://github.com/repat/respond-io-client",
     "license": "MIT",
-    "version" : "0.1",
+    "version" : "1.0",
     "authors": [
         {
             "name": "repat",

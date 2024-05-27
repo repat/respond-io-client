@@ -127,7 +127,8 @@ $client->sendQuickReply($id, $title, $replies);
 * MIT
 
 ## Version
-* Version 0.1
+* API v1: Version 0.1 (initial version, work in progress)
+* API v2: Version 1.0 (community maintained)
 
 ## Contact
 #### repat
