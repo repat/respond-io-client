@@ -22,7 +22,7 @@ class Client {
 	 */
 	private string $channelApiToken;
 
-	const API_URL = 'https://app.respond.io/api/v1/';
+	const API_URL = 'https://api.respond.io/v2/';
 
 	const FIELDS = [
 		'firstName',
@@ -31,6 +31,7 @@ class Client {
 		'language',
 		'phone',
 		'email',
+		'custom_fields',
 	];
 
 	const ATTACHMENT_TYPES = [
@@ -51,7 +52,8 @@ class Client {
 	 * @param string $channelApiToken
 	 * @param array $options
 	 */
-	public function __construct(string $channelApiToken, array $options = []) {
+	public function __construct(string $channelApiToken, array $options = [])
+	{
 		$this->channelApiToken = $channelApiToken;
 		$this->guzzle = new Guzzle(array_merge([
 			'base_uri' => self::API_URL,
