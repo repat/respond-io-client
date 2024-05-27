@@ -6,7 +6,8 @@ use GuzzleHttp\Client as Guzzle;
 use Repat\RespondIoClient\Traits\Contacts;
 use Repat\RespondIoClient\Traits\Messages;
 
-class Client {
+class Client
+{
 
 	use Contacts;
 	use Messages;
@@ -69,7 +70,8 @@ class Client {
 	 * JSON decodes the guzzle response
 	 * @param $response Guzzle Response
 	 */
-	private function unpackResponse($response) : array {
+	private function unpackResponse($response) : mixed
+    {
 		return json_decode($response->getBody()->getContents(), JSON_OBJECT_AS_ARRAY);
 	}
 }

@@ -6,12 +6,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class Response
 {
-	private $clientResponse;
 	private $contents;
 
 	public function __construct(ResponseInterface $clientResponse)
 	{
-		$this->clientResponse = $clientResponse;
 		$this->contents = json_decode($clientResponse->getBody()->getContents(), true);
 	}
 

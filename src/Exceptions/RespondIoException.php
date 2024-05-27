@@ -2,5 +2,7 @@
 
 namespace Repat\RespondIoClient\Exceptions;
 
-class RespondIoException extends \Exception {
+class RespondIoException extends \Exception
+{
+    //
 }
