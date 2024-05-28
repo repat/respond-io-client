@@ -2,13 +2,13 @@ Respond.io Client
 ======
 > ⚠️ WORK IN PROGRESS ⚠️
 
-**respond-io-client** is the unofficial package for the [respond.io messaging platform API](https://respond.io). Pull requests welcome.
+**respond-io-client** is the unofficial package for the [respond.io messaging platform API](https://respond.io) and now supports V2 of the API. Pull requests welcome.
 
 ## Installation
 `composer require repat/respond-io-client`
 
 ## Usage
-The library will generally throw Guzzle's Exceptions, see [Contacts API Error Codes](https://docs.respond.io/developer-api/contacts-api#error-codes) and [Messages API Error Codes](https://docs.respond.io/developer-api/messages-api#error-codes) in their [documentation](https://docs.respond.io/).
+The library will generally throw Guzzle's Exceptions, see [API Error Codes](https://developers.respond.io/#error-code) in the respond.io [documentation](https://developers.respond.io/docs/api).
 
 ### Setup
 
@@ -27,46 +27,60 @@ $client = new \Repat\RespondIoClient\Client($apiToken, $options);
 // Get ID
 $id = '...';
 
-/*
-|--------------------------------------------------------------------------
-| Get Contacts
-|--------------------------------------------------------------------------
-*/
+// Set identifying field to use for searches, creation and updates
+$identifyingField = 'phone';
+```
+
+
+#####Get Contact
+['Get a contact' respond.io documentation](https://developers.respond.io/docs/api/cbcfb23486778-get-a-contact)
+
+```php
 // If you know the ID
 $client->getContactById($id);
+```
 
-// Search by field
-$customFieldName = 'phone';
-$customFieldValue = '+15551234567';
-$client->getContactByCustomField($customFieldName, $customFieldValue);
+#####Search for contacts
+['List the contacts' respond.io documentation](https://developers.respond.io/docs/api/0759d02787ab3-list-the-contacts)
 
-/*
-|--------------------------------------------------------------------------
-| Update Contacts
-|--------------------------------------------------------------------------
-*/
+<code>$cursorId</code> - Integer - Start position for the search and is null by default.  Responses from respond.io will contain a new cursorId which can be used for subsequent calls.
+
+<code>$limit</code> - Integer - Number of records to return.  Max of 100.
+
+```php
+$filter = new ContactFilter();
+$filter->addFilter(
+	field: 'phone',
+	operator: 'isEqualTo',
+	value: '+15551234567'
+)
+$client->getContacts($filter, $cursorId, $limit);
+```
+
+#####Update Contacts
+<code>$identifyingField</code> must exist as key in fields array
+
+```php
 $fields = [
 	'phone' => '+15557654321',
 ];
 
-$client->updateContact($id, $fields);
+$client->updateContact($fields, $identifyingField);
+```
 
-/*
-|--------------------------------------------------------------------------
-| Tags
-|--------------------------------------------------------------------------
-*/
+#####Tags
 
+```php
 $tags = ['foo', 'bar'];
 
 $client->addTag($id, $tags);
 $client->removeTag($id, $tags);
+```
 
-/*
-|--------------------------------------------------------------------------
-| Create Contact
-|--------------------------------------------------------------------------
-*/
+#####Create Contact
+<code>$identifyingField</code> must exist as key in fields array
+
+```php
 $fields = [
 	'firstName' => 'John',
 	'lastName' => 'Doe',
@@ -75,25 +89,20 @@ $fields = [
 	//
 ];
 
-$client->createContact($fields);
+$client->createContact($fields, $identifyingField);
 ```
 
 ### Messages
 
+#####Send Message
+
 ```php
-/*
-|--------------------------------------------------------------------------
-| Text
-|--------------------------------------------------------------------------
-*/
+$client->sendMessage($id, $text);
+```
 
-$client->sendText($id, $text);
+#####Send Attachment
 
-/*
-|--------------------------------------------------------------------------
-| Attachments
-|--------------------------------------------------------------------------
-*/
+```php
 $type = Client::TYPE_IMAGE; // 'image'
 
 // OR:
@@ -104,17 +113,6 @@ $type = Client::TYPE_IMAGE; // 'image'
 $url = 'https://repat.de/Bilder/repat40x40.png';
 
 $client->sendAttachment($id, $type, $url);
-
-/*
-|--------------------------------------------------------------------------
-| Quick Reply
-|--------------------------------------------------------------------------
-*/
-
-$title = 'Would you like Foo, Bar or Baz?';
-$replies = ['Foo', 'Bar', 'Baz'];
-
-$client->sendQuickReply($id, $title, $replies);
 ```
 
 ## ToDo
