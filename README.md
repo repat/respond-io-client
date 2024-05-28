@@ -2,7 +2,10 @@ Respond.io Client
 ======
 > ⚠️ WORK IN PROGRESS ⚠️
 
-**respond-io-client** is the unofficial package for the [respond.io messaging platform API](https://respond.io) and now supports V2 of the API. Pull requests welcome.
+**respond-io-client** is the unofficial package for the [respond.io messaging platform API](https://respond.io).
+Version 0.1 supports API V1 and version 1.0 now supports V2 as well.
+
+Pull requests welcome.
 
 ## Installation
 `composer require repat/respond-io-client`
@@ -32,7 +35,7 @@ $identifyingField = 'phone';
 ```
 
 
-#####Get Contact
+##### Get Contact
 ['Get a contact' respond.io documentation](https://developers.respond.io/docs/api/cbcfb23486778-get-a-contact)
 
 ```php
@@ -40,12 +43,11 @@ $identifyingField = 'phone';
 $client->getContactById($id);
 ```
 
-#####Search for contacts
+##### Search for contacts
 ['List the contacts' respond.io documentation](https://developers.respond.io/docs/api/0759d02787ab3-list-the-contacts)
 
-<code>$cursorId</code> - Integer - Start position for the search and is null by default.  Responses from respond.io will contain a new cursorId which can be used for subsequent calls.
-
-<code>$limit</code> - Integer - Number of records to return.  Max of 100.
+- `$cursorId`:  Start position for the search and is `null` by default.  Responses from respond.io will contain a new `cursorId` which can be used for subsequent calls. (Integer)
+- `$limit`: Number of records to return.  Max of 100. (Integer)
 
 ```php
 $filter = new ContactFilter();
@@ -57,8 +59,8 @@ $filter->addFilter(
 $client->getContacts($filter, $cursorId, $limit);
 ```
 
-#####Update Contacts
-<code>$identifyingField</code> must exist as key in fields array
+##### Update Contacts
+- `$identifyingField`: must exist as key in fields array
 
 ```php
 $fields = [
@@ -68,7 +70,7 @@ $fields = [
 $client->updateContact($fields, $identifyingField);
 ```
 
-#####Tags
+##### Tags
 
 ```php
 $tags = ['foo', 'bar'];
@@ -77,8 +79,8 @@ $client->addTag($id, $tags);
 $client->removeTag($id, $tags);
 ```
 
-#####Create Contact
-<code>$identifyingField</code> must exist as key in fields array
+##### Create Contact
+- `$identifyingField`: must exist as key in fields array
 
 ```php
 $fields = [
@@ -94,13 +96,13 @@ $client->createContact($fields, $identifyingField);
 
 ### Messages
 
-#####Send Message
+##### Send Message
 
 ```php
 $client->sendMessage($id, $text);
 ```
 
-#####Send Attachment
+##### Send Attachment
 
 ```php
 $type = Client::TYPE_IMAGE; // 'image'
@@ -117,7 +119,6 @@ $client->sendAttachment($id, $type, $url);
 
 ## ToDo
 
-* Composer / Packagist release
 * Tests
 * [Message Template API](https://docs.respond.io/developer-api/messages-api/message-template-api)
 
@@ -129,10 +130,13 @@ $client->sendAttachment($id, $type, $url);
 * API v2: Version 1.0 (community maintained)
 
 ## Contact
-#### repat
+#### repat (v1 author)
 * Homepage: [repat.de](https://repat.de)
 * e-mail: repat@repat.de
 * Twitter: [@repat123](https://twitter.com/repat123 "repat123 on twitter")
 * other communication/social media
+
+#### repat (v2 author)
+* [touson on GitHub](https://github.com/touson)
 
 [![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=repat&url=https://github.com/repat/respond-io-title&title=respond-io-title&language=&tags=github&category=software)
